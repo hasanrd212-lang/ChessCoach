@@ -1,0 +1,40 @@
+name: Build ChessCoach IPA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Resolve Swift packages
+        run: xcodebuild -resolvePackageDependencies -project ChessCoach.xcodeproj
+
+      - name: Build archive (unsigned)
+        run: |
+          xcodebuild archive \
+            -project ChessCoach.xcodeproj \
+            -scheme ChessCoach \
+            -archivePath build/ChessCoach.xcarchive \
+            -sdk iphoneos \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package IPA
+        run: |
+          mkdir -p build/Payload
+          cp -r build/ChessCoach.xcarchive/Products/Applications/ChessCoach.app build/Payload/
+          cd build && zip -r ChessCoach.ipa Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChessCoach-unsigned
+          path: build/ChessCoach.ipa
