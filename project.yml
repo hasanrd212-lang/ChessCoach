@@ -1,0 +1,28 @@
+name: ChessCoach
+options:
+  bundleIdPrefix: com.chesscoach
+  deploymentTarget:
+    iOS: "16.0"
+
+packages:
+  StockfishKit:
+    url: https://github.com/varton86/StockfishKit
+    branch: main
+
+targets:
+  ChessCoach:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources/ChessCoach
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.chesscoach.app
+        SWIFT_VERSION: "5.0"
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - package: StockfishKit
