@@ -11,7 +11,7 @@ struct StudyBoardView: View {
                 VStack(spacing: 20) {
                     ChessBoardView(board: board)
                         .padding(.horizontal)
-                        .onChange(of: board.squares.count) { _ in
+                        .onReceive(board.objectWillChange) { _ in
                             // Keep the FEN field in sync whenever a move is made on the board.
                             fen = board.exportFEN()
                         }
