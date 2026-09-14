@@ -74,8 +74,11 @@ final class ChessEngine: ObservableObject {
             default:
                 break
             }
+
             // Stop consuming once we have the final best move for this request.
-            if bestMoveUCI != nil { break }
+            if bestMoveUCI != nil {
+                break
+            }
         }
 
         guard let bestMoveUCI else { return nil }
@@ -97,11 +100,13 @@ final class ChessEngine: ObservableObject {
     /// This is the core of "post-game analysis."
     func analyzeGame(_ game: ImportedGame, depth: Int = 16) async -> ImportedGame {
         var annotated = game
-        var previousBestEval: Int? = nil
 
         for i in annotated.moves.indices {
             let move = annotated.moves[i]
             guard let eval = await evaluate(fen: move.fenAfter, depth: depth) else { continue }
             annotated.moves[i].evaluation = eval
+        }
 
-            if let prevScore = previousBestEval, let currentScore = eval.centipawns }
+        return annotated
+    }
+}
