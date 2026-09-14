@@ -104,4 +104,4 @@ final class ChessEngine: ObservableObject {
             guard let eval = await evaluate(fen: move.fenAfter, depth: depth) else { continue }
             annotated.moves[i].evaluation = eval
 
-            if let prevScore = previousBestEval, let currentScore = eval.centipawns {
+            if let prevScore = previousBestEval, let currentScore = eval.centipawns }
