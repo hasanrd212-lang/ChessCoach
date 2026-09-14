@@ -32,7 +32,7 @@ final class ChessEngine: ObservableObject {
         await newEngine.send(command: .setoption(id: "Threads", value: "2"))
         await newEngine.send(command: .setoption(id: "Hash", value: "128"))
 
-        newEngine.start()
+        await newEngine.start()
     }
 
     /// Evaluate a single position to a fixed depth. Good for the study board
@@ -57,15 +57,12 @@ final class ChessEngine: ObservableObject {
             switch response {
             case .info(let info):
                 if let score = info.score {
-                    switch score {
-                    case .cp(let cp):
+                    if let cp = score.cp {
                         centipawns = cp
                         mateIn = nil
-                    case .mate(let moves):
-                        mateIn = moves
+                    } else if let mate = score.mate {
+                        mateIn = mate
                         centipawns = nil
-                    @unknown default:
-                        break
                     }
                 }
                 if let infoPV = info.pv {
