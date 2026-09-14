@@ -38,7 +38,7 @@ final class ChessEngine: ObservableObject {
     /// Evaluate a single position to a fixed depth. Good for the study board
     /// where you want a quick, responsive answer.
     func evaluate(fen: String, depth: Int = 18) async -> EngineEvaluation? {
-        guard let engine, await engine.isRunning else { return nil }
+        guard let engine = self.engine, await engine.isRunning else { return nil }
         guard let stream = await engine.responseStream else { return nil }
 
         isThinking = true
@@ -64,6 +64,8 @@ final class ChessEngine: ObservableObject {
                     case .mate(let moves):
                         mateIn = moves
                         centipawns = nil
+                    @unknown default:
+                        break
                     }
                 }
                 if let infoPV = info.pv {
@@ -81,14 +83,14 @@ final class ChessEngine: ObservableObject {
             }
         }
 
-        guard let bestMoveUCI else { return nil }
+        guard let finalBestMove = bestMoveUCI else { return nil }
 
         let eval = EngineEvaluation(
             fen: fen,
             centipawns: centipawns,
             mateIn: mateIn,
-            bestMoveUCI: bestMoveUCI,
-            bestMoveSAN: bestMoveUCI,
+            bestMoveUCI: finalBestMove,
+            bestMoveSAN: finalBestMove,
             principalVariationSAN: pv
         )
         lastEvaluation = eval
