@@ -58,7 +58,7 @@ final class ChessEngine: ObservableObject {
             case .info(let info):
                 if let score = info.score {
                     if let cp = score.cp {
-                        centipawns = Int(cp)
+                        centipawns = Int(cp) // cp is Double, cast to Int
                         mateIn = nil
                     } else if let mate = score.mate {
                         mateIn = mate
