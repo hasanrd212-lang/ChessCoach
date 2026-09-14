@@ -42,11 +42,8 @@ enum MoveClassification: String {
     case mistake = "Mistake"
     case blunder = "Blunder"
 
-    /// Rough centipawn-loss thresholds used to classify a played move
-    /// against the engine's top choice. Tune these once you've played
-    /// with real games — these are reasonable starting points.
-    static func classify(centipawnLoss: Int) -> MoveClassification {
-        switch centipawnLoss {
+    static func classify(centipawnsLoss: Int) -> MoveClassification {
+        switch centipawnsLoss {
         case ..<10: return .best
         case 10..<40: return .good
         case 40..<100: return .inaccuracy
